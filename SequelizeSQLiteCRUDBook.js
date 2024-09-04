@@ -7,7 +7,7 @@ app.use(express.json());
 const sequelize = new Sequelize('database', 'username', 'password', {
     host: 'localhost',
     dialect: 'sqlite',
-    storage: './Daabase/SQBooks.sqlite'
+    storage: './Database/SQBooks.sqlite'
 })
 
 const Book = sequelize.define('book', {
@@ -28,7 +28,7 @@ const Book = sequelize.define('book', {
 
 sequelize.sync();
 
-app.getMaxListeners('/books', (req, res) => {
+app.get('/books', (req, res) => {
     Book.findAll().then(book => {
         res.json(book);
     }).catch(err => {
@@ -37,7 +37,7 @@ app.getMaxListeners('/books', (req, res) => {
 });
 
 app.get('/books/:id', (req, res) => {
-    Book.FindByPk(req.params.id).then(book => {
+    Book.findByPk(req.params.id).then(book => {
         if (!book) {
             res.status(404).send('Book not found');
         } else {
@@ -86,9 +86,7 @@ app.delete('/books/:id', (req, res) => {
     }).catch(err => {
         res.status(500).send(err);
     });
-
-    const port = process.env.PORT || 3000;
-    app.listen(port, () => {
-        app.listen(port, () => console.log(`Listening on port ${port}...`));
-    });
 });
+
+const port = process.env.PORT || 3000;
+app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`));
